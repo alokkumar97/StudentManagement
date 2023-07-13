@@ -23,7 +23,6 @@ import com.imaginnovate.sm.service.StudentService;
 @RequestMapping("/student")
 public class StudentController {
 
-	
 	@Autowired
 	private StudentService studentService;
 	
