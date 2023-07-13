@@ -5,6 +5,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -17,15 +23,43 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String firstName;
-    private String lastName;
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate dob;
-    private String section;
-    private String gender;
-    private int marks1;
-    private int marks2;
-    private int marks3;
+ // Validate Names
+ 	@NotBlank(message = "Invalid Name: Empty name")
+ 	@NotNull(message = "Invalid Name: Name is NULL")
+     @Size(min = 3, max = 30, message = "Invalid Name: Must be of 3 - 30 characters")
+ 	private String firstName;
+ 	
+ 	@NotBlank(message = "Invalid Name: Empty name")
+ 	@NotNull(message = "Invalid Name: Name is NULL")
+     @Size(min = 3, max = 30, message = "Invalid Name: Must be of 3 - 30 characters")
+     private String lastName;
+ 	
+ 	@JsonFormat(pattern = "dd-MM-yyyy")
+     private LocalDate dob;
+ 	// Validate Section and Gender
+ 	@Pattern(regexp = ("[A-C]"),message = "Invalid Section: Section must be 'A' or 'B' or 'C' ")
+     private String section;
+ 	@Pattern(regexp = ("[M,F,T]"),message = "Invalid Gender: Gender must be 'M' or 'F' or 'T' ")
+     private String gender;
+     
+ 	//Validates Marks
+ 	@NotNull(message = "Invalid Input: Mark1 is NULL")
+ 	@Min(value = 0, message = "Invalid Mark1: Must be equals to 0 or >=100" )
+ 	@Max(value = 100, message = "Invalid Mark1: Must be equals to 100  or <=0" )
+     private int marks1;
+     
+    
+ 	@NotNull(message = "Invalid Input: Mark2 is NULL")
+ 	@Min(value = 0, message = "Invalid Mark2: Must be equals to 0 or >=100" )
+ 	@Max(value = 100, message = "Invalid Mark2: Must be equals to 100  or <=0" )
+     private int marks2;
+     
+    
+ 	@NotNull(message = "Invalid Input: Mark3 is NULL")
+     @Min(value = 0, message = "Invalid Mark3: Must be equals to 0 or >=100" )
+ 	@Max(value = 100, message = "Invalid Mark3: Must be equals to 100  or <=0" )
+     private int marks3;
+ 	
     private int total;
     private double average;
     private String result;

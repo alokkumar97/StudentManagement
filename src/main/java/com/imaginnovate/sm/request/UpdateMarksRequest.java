@@ -7,20 +7,20 @@ import javax.validation.constraints.NotNull;
 public class UpdateMarksRequest {
 
 	@NotNull(message = "Invalid Input: Mark1 is NULL")
-	@Min(value = 0, message = "Invalid Mark1: Must be of 0 or greater" )
-	@Max(value = 100, message = "Invalid Mark1: Must be of 100 or less" )
+	@Min(value = 0, message = "Invalid Mark1: Must be equals to 0 or >=100" )
+	@Max(value = 100, message = "Invalid Mark1: Must be equals to 100  or <=0" )
     private int marks1;
     
    
 	@NotNull(message = "Invalid Input: Mark2 is NULL")
-	@Min(value = 0, message = "Invalid Mark2: Must be of 0 or greater" )
-	@Max(value = 100, message = "Invalid Mark2: Must be of 100 or less" )
+	@Min(value = 0, message = "Invalid Mark2: Must be equals to 0 or >=100" )
+	@Max(value = 100, message = "Invalid Mark2: Must be equals to 100  or <=0" )
     private int marks2;
     
    
 	@NotNull(message = "Invalid Input: Mark3 is NULL")
-    @Min(value = 0, message = "Invalid Mark3: Must be of 0 or greater" )
-	@Max(value = 100, message = "Invalid Mark3: Must be of 100 or less" )
+    @Min(value = 0, message = "Invalid Mark3: Must be equals to 0 or >=100" )
+	@Max(value = 100, message = "Invalid Mark3: Must be equals to 100  or <=0" )
     private int marks3;
 
 	public int getMarks1() {

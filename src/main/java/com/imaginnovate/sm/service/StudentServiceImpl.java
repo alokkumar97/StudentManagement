@@ -7,9 +7,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.imaginnovate.sm.exception.StudentAlreadyExistsException;
+import com.imaginnovate.sm.exception.StudentNotFoundException;
 import com.imaginnovate.sm.model.Student;
 import com.imaginnovate.sm.repository.StudentRepository;
-import com.imaginnovate.sm.request.StudentRequest;
 import com.imaginnovate.sm.request.UpdateMarksRequest;
 import com.imaginnovate.sm.validation.StudentValidation;
 
@@ -21,13 +22,23 @@ public class StudentServiceImpl implements StudentService {
 	
 	@Autowired
 	private StudentRepository studentRepository;
-	
+
+	// save student details
 	@Override
-	public boolean createStudent(StudentRequest studentReq)  {
-		
-		if(!studvalidation.isValidStudent(studentReq)) {
+	public boolean createStudent(Student studentReq)  {
+		// Verify If Student Exist or Not
+		List<Student> list = studentRepository.findAll();
+		for(Student student : list) {
+			if(student.getFirstName().equals(studentReq.getFirstName()) && 
+					student.getLastName().equals(studentReq.getLastName()) && student.getGender().equals(studentReq.getGender())) {
+				throw new StudentAlreadyExistsException();
+			}
+		}
+		// Validate Age 
+		if(!studvalidation.isValidStudentAge(studentReq)) {
 			return false;
 		}
+		// Save Student Details
 		Student student = new Student();
 		BeanUtils.copyProperties(studentReq, student);
 		
@@ -43,23 +54,27 @@ public class StudentServiceImpl implements StudentService {
         studentRepository.save(student);
 		return true;
 	}
-
+	// Get all or By id
 	@Override
-	public List<Student> getAllStudent(Long id) {
-		return null;
+	public List<Student> getAllStudentByid(Long id) {
+		if(studentRepository.findById(id).isEmpty()) {
+			throw new StudentNotFoundException();
+		}
+		if(null != id) {
+			return studentRepository.findAllById(id);
+		}else
+		return studentRepository.findAll();
 	}
-
+	// Update
 	@Override
 	public String updateStudent(Long id, UpdateMarksRequest request) {
 		Optional<Student> optionalStudent = studentRepository.findById(id);
         if (optionalStudent.isEmpty()) {
-            return "Student is not present !";
+        	throw new StudentNotFoundException();
         }
         
         Student student = optionalStudent.get();
-        if(!studvalidation.isValidMarks(request.getMarks1(), request.getMarks2(), request.getMarks3())) {
-		return "Input mark is not valid! ";
-        }
+        
         student.setMarks1(request.getMarks1());
         student.setMarks2(request.getMarks2());
         student.setMarks3(request.getMarks3());
